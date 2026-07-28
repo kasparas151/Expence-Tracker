@@ -5,11 +5,14 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        List<Expence> expenses = new List<Expence>();
+        expenses.Add(new Expence("Lunch", 15.50m, "Food"));
+        expenses.Add(new Expence("Movie Ticket", 12.00m, "Entertainment"));
+
         bool exit = false;
         while (!exit)
         {
             Console.WriteLine("Welcome to the Expense Tracker!");
-            List<Expence> expenses = new List<Expence>();
             Console.WriteLine("Choose an option:");
             Console.WriteLine("1. Add Expense");
             Console.WriteLine("2. View Expenses");
@@ -19,9 +22,6 @@ public class Program
             Console.WriteLine("6. Save To File");
             Console.WriteLine("7. Load From File");
             Console.WriteLine("8. Exit");
-            expenses.Add(new Expence("Lunch", 15.50m, "Food"));
-            expenses.Add(new Expence("Movie Ticket", 12.00m, "Entertainment"));
-
             string input = Console.ReadLine();
             switch (input)
             {
@@ -32,16 +32,36 @@ public class Program
                     decimal amount = decimal.Parse(Console.ReadLine());
                     Console.WriteLine("Enter expense category:");
                     string category = Console.ReadLine();
-                    expenses.Add(new Expence(name, amount, category));
+                    ExpenceManager.AddExpense(expenses, new Expence(name, amount, category));
                     break;
                 case "2":
-                    foreach (var expense in expenses)
-                    {
-                        Console.WriteLine(expense);
-                    }
+                    ExpenceManager.ShowExpenses(expenses);
                     break;
                 case "3":
-                    Console.WriteLine($"Total Spent: {expenses.Sum(e => e.Amount):C}");
+                    ExpenceManager.ShowTotalSpent(expenses);
+                    break;
+                case "4":
+                    Console.WriteLine("Enter the index of the expense to delete:");
+                    int index = int.Parse(Console.ReadLine());
+                    ExpenceManager.DeleteExpense(expenses, index);
+                    break;
+                case "5":
+                    Console.WriteLine("Enter the category of expenses to display:");
+                    category = Console.ReadLine();
+                    ExpenceManager.ShowExpensesByCategory(expenses, category);
+                    break;
+                case "6":
+                    Console.WriteLine("Enter the filename to save expenses to:");
+                    string saveFilename = Console.ReadLine();
+                    ExpenceManager.SaveExpenses(expenses, saveFilename);
+                    Console.WriteLine("File saved!");
+                    Console.WriteLine($"Location: {Path.GetFullPath(saveFilename)}");
+                    break;
+                case "7":
+                    Console.WriteLine("Enter the filename to load expenses from:");
+                    string loadFilename = Console.ReadLine();
+                    ExpenceManager.LoadExpenses(expenses, loadFilename);
+                    Console.WriteLine("File loaded!");
                     break;
                 case "8":
                     exit = true;

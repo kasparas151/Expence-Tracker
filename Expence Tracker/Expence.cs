@@ -20,8 +20,6 @@ namespace Expence_Tracker
             Date = DateTime.Now;
         }
 
-
-
         public override string ToString() {
             return $"[{Date:yyyy-MM-dd}] {Description} - {Amount:C} ({Category})";
         }
